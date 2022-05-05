@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace AgencyAPI.Models
+{
+    public class AgentService
+    {
+        public int agentserviceid { get; set; }
+        public string name { get; set; }
+        public string servicecode { get; set; }
+        
+    }
+}
