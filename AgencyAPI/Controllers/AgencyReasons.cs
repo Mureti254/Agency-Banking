@@ -128,7 +128,7 @@ namespace AgencyAPI.Controllers
         }
 
         // PUT api/<AgencyReasons>/5
-        [HttpPut("Reason")]
+        [HttpPut("UpdateReason/{id}")]
         public async Task<JObject> Put(Reasons Reasons)
         {
             DBHandler dBHandler = new DBHandler();

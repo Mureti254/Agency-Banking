@@ -95,23 +95,5 @@ namespace AgencyAPI.Controllers
 
             return response_json;
         }
-
-        //// POST api/<AgencySuperagents>
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT api/<AgencySuperagents>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<AgencySuperagents>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

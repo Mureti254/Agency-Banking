@@ -4577,6 +4577,69 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
             return dt;
         }
 
+        public DataTable AgencyEmailScheduler(string RecipientEmail, string subject, string message, string SenderEmail, string messagetype,
+            string otp, DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("emailscheduler_inserts", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@RecipientEmail", RecipientEmail);
+                            cmd.Parameters.AddWithValue("@subject", subject);
+                            cmd.Parameters.AddWithValue("@message", message);
+                            cmd.Parameters.AddWithValue("@SenderEmail", SenderEmail);
+                            cmd.Parameters.AddWithValue("@messagetype", messagetype);
+                            cmd.Parameters.AddWithValue("@otp", otp);
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
+
+        public DataTable AgencyPasswordChanges(string newpassword, DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("password_change", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@newpassword", newpassword);
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
 
         #endregion
     }

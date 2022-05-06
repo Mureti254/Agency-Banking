@@ -127,7 +127,7 @@ namespace AgencyAPI.Controllers
         }
 
         // PUT api/<AgencyBusinessType>/5
-        [HttpPut("UpdateBusinessType")]
+        [HttpPut("UpdateBusinessType/{id}")]
         public async Task<JObject> Put(BusinessType BusinessType)
         {
             DBHandler dBHandler = new DBHandler();

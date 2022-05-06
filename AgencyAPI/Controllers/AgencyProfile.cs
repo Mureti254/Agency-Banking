@@ -127,7 +127,7 @@ namespace AgencyAPI.Controllers
         }
 
         // PUT api/<AgencyProfile>/5
-        [HttpPut("UpdateProfile")]
+        [HttpPut("UpdateProfile/{id}")]
         public async Task<JObject> Put(Profile Profile)
         {
             DBHandler dBHandler = new DBHandler();
