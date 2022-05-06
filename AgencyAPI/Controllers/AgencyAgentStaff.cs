@@ -105,7 +105,7 @@ namespace AgencyAPI.Controllers
             JObject response_json = new JObject();
             try
             {
-                //string[] saAllowedCharacters = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0","b", "D", "Z", "X", "p", "e", "f", "_" };
+                //string[] saAllowedCharacters = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0","A", "B", "C", "D", "E", "F", "G", "H","I","J""L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z" };
                 //string sRandomPass = GenerateRandomPass(8, saAllowedCharacters);
                 var encryptedpassword = Citisec.EncryptString(AgentStaff.password); /*(sRandomPass);*/
                 var response = dBHandler.AgencyAddAgentStaff(AgentStaff.firstname, AgentStaff.lastname, AgentStaff.surname, AgentStaff.phone, AgentStaff.emailaddress, AgentStaff.username, encryptedpassword,

@@ -27,7 +27,7 @@ namespace AgencyAPI.Controllers
                 if (response.Rows.Count > 0)
                 {
                     var encryptedpassword = Citisec.EncryptString(login.password);
-                    var dbpassword = response.Rows[0]["password"].ToString(); //emailaddress=RN77@gmail.com,password=4823nedk//
+                    var dbpassword = response.Rows[0]["password"].ToString(); //emailaddress=michellemukiri169@gmail.com,password=1022P#lease//
                     var decrytptedpassword = Citisec.DecryptString(login.password);
                     if (dbpassword.Equals(encryptedpassword)) /*encryptedpassword,dbpassword,decrytptedpassword*/
                     {
