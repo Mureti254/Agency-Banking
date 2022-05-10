@@ -105,8 +105,8 @@ namespace AgencyAPI.Controllers
             JObject response_json = new JObject();
             try
             {
-                var response = dBHandler.AgencyAddAgentOutlet(AgentOutlet.agentid, AgentOutlet.name, AgentOutlet.emailaddress, AgentOutlet.phone,
-                    AgentOutlet.latitude, AgentOutlet.longitude);
+                var response = dBHandler.AgencyAddAgentOutlet(AgentOutlet.name, AgentOutlet.phone, AgentOutlet.emailaddress, AgentOutlet.agentid,
+                    AgentOutlet.agentoutletid,AgentOutlet.latitude, AgentOutlet.longitude, AgentOutlet.cashdepositlimit, AgentOutlet.operatingdeviceid);
                 if (response.Rows.Count > 0)
                 {
                     response_json.Add("RESPONSECODE", response.Rows[0]["RESPONSECODE"].ToString());
@@ -135,8 +135,8 @@ namespace AgencyAPI.Controllers
             JObject response_json = new JObject();
             try
             {
-                var response = dBHandler.AgencyUpdateAgentOutlet(AgentOutlet.agentid, AgentOutlet.agentoutletid, AgentOutlet.name, AgentOutlet.emailaddress, AgentOutlet.phone,
-                    AgentOutlet.latitude, AgentOutlet.longitude);
+                var response = dBHandler.AgencyUpdateAgentOutlet(AgentOutlet.name, AgentOutlet.phone, AgentOutlet.emailaddress, AgentOutlet.agentid, 
+                    AgentOutlet.latitude, AgentOutlet.longitude, AgentOutlet.agentoutletid, AgentOutlet.cashdepositlimit, AgentOutlet.operatingdeviceid);
                 if (response.Rows.Count > 0)
                 {
                     response_json.Add("RESPONSECODE", response.Rows[0]["RESPONSECODE"].ToString());

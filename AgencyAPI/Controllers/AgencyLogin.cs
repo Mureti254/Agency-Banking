@@ -27,13 +27,15 @@ namespace AgencyAPI.Controllers
                 if (response.Rows.Count > 0)
                 {
                     var encryptedpassword = Citisec.EncryptString(login.password);
-                    var dbpassword = response.Rows[0]["password"].ToString(); //emailaddress=michellemukiri169@gmail.com,password=1022P#lease//
+                    var dbpassword = response.Rows[0]["password"].ToString(); //emailaddress=TestBeta@gmail.com,password=FintechTestB,username=TestB//
                     var decrytptedpassword = Citisec.DecryptString(login.password);
-                    if (dbpassword.Equals(encryptedpassword)) /*encryptedpassword,dbpassword,decrytptedpassword*/
+                    if (encryptedpassword.Equals(dbpassword)) /*encryptedpassword,dbpassword,decrytptedpassword*/
                     {
                         string[] saAllowedCharacters = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
                         string sRandomOTP = GenerateRandomOTP(8, saAllowedCharacters);
                         var update_otp_response = dBHandler.AgencyOTP(login.emailaddress, sRandomOTP);
+                        var message = "Your OTP is " + sRandomOTP;
+                        var update_email_response = dBHandler.AgencyEmailScheduler(login.emailaddress, "One Time Password", message,"","email",sRandomOTP);
                         response_json.Add("RESPONSECODE", "00");
                         response_json.Add("RESPONSEMESSAGE", "Success");
                     }

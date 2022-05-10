@@ -21,12 +21,21 @@ namespace AgencyAPI
         }
 
         public IConfiguration Configuration { get; }
+        private readonly string _policyName = "CorsPolicy";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen();
+            services.AddCors(o => o.AddPolicy(_policyName, builder =>
+            {
+                builder.WithOrigins("http://10.100.0.109:3000", "http://10.100.0.109", "http://localhost:3000", "http://localhost")
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            }));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +56,8 @@ namespace AgencyAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(_policyName);
 
             app.UseAuthorization();
 
