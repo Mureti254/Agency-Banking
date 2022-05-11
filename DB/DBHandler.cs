@@ -4651,6 +4651,7 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
             return dt;
         }
 
+
         public DataTable AgencyMenuAccessItem(DataBaseObject database = DataBaseObject.HostDB)
         {
             DataTable dt = new DataTable();
@@ -4681,7 +4682,7 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
             return dt;
         }
 
-        public DataTable AgencyAddMenuAccessItem(string name, string link, int profileid, int parentmenuid,int menuid, DataBaseObject database = DataBaseObject.HostDB)
+        public DataTable AgencyMenuAccessItem(int id, DataBaseObject database = DataBaseObject.HostDB)
         {
             DataTable dt = new DataTable();
 
@@ -4689,13 +4690,44 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
             {
                 using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
                 {
-                    using (SqlCommand cmd = new SqlCommand("add_menu_access_item", connect))
+                    using (SqlCommand cmd = new SqlCommand("get_records", connect))
                     {
                         using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
 
-                            cmd.Parameters.AddWithValue("@name", name);
+                            cmd.Parameters.AddWithValue("@module", "menu_access_item");
+                            cmd.Parameters.AddWithValue("@param1", id + "");
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
+
+        public DataTable AgencyAddMenuAccessItem(string name, string link, int profileid, int parentmenuid, int menuid, DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("insert_menu_access_item", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@menu_access_name", name);
                             cmd.Parameters.AddWithValue("@link", link);
                             cmd.Parameters.AddWithValue("@profileid", profileid);
                             cmd.Parameters.AddWithValue("@parentmenuid", parentmenuid);
@@ -4715,7 +4747,39 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
 
             return dt;
         }
-        public DataTable AgencyMenuItem(DataBaseObject database = DataBaseObject.HostDB)
+
+        public DataTable AgencyDeleteMenuAccessItem(int menuaccessitemid, DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("delete_menu_access_item", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@menuaccessitemid", menuaccessitemid);
+
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
+
+        public DataTable AgencyMenuItem( DataBaseObject database = DataBaseObject.HostDB)
         {
             DataTable dt = new DataTable();
 
@@ -4730,6 +4794,7 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
                             cmd.CommandType = CommandType.StoredProcedure;
 
                             cmd.Parameters.AddWithValue("@module", "menu_item");
+                           
                             sd.Fill(dt);
                         }
                     }
@@ -4744,8 +4809,7 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
 
             return dt;
         }
-
-        public DataTable AgencyAddMenuItem(string name, string link, int icon, int parentmenuid, DataBaseObject database = DataBaseObject.HostDB)
+        public DataTable AgencyMenuItem(int id, DataBaseObject database = DataBaseObject.HostDB)
         {
             DataTable dt = new DataTable();
 
@@ -4753,16 +4817,77 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
             {
                 using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
                 {
-                    using (SqlCommand cmd = new SqlCommand("add_menu_item", connect))
+                    using (SqlCommand cmd = new SqlCommand("get_records", connect))
                     {
                         using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
 
-                            cmd.Parameters.AddWithValue("@name", name);
+                            cmd.Parameters.AddWithValue("@module", "menu_item");
+                            cmd.Parameters.AddWithValue("@param1", id + "");
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
+
+        public DataTable AgencyAddMenuItem(string name,string link,string icon, int parentmenuid,DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("insert_menu", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@menuname", name);
                             cmd.Parameters.AddWithValue("@link", link);
-                            cmd.Parameters.AddWithValue("@profileid", icon);
+                            cmd.Parameters.AddWithValue("@icon", icon);
                             cmd.Parameters.AddWithValue("@parentmenuid", parentmenuid);
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
+
+        public DataTable AgencyDeleteMenuItem(int menuitemid, DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("delete_menu_item", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@menuitemid", menuitemid);
 
                             sd.Fill(dt);
                         }
@@ -4779,6 +4904,36 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
             return dt;
         }
 
+
+        public DataTable AgencyProfileMenuSelect(string profilename,DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("Menu_by_profile_select", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@profilename", profilename);
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
         #endregion
     }
     public class Crypto
