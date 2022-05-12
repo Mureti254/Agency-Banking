@@ -139,7 +139,7 @@ namespace AgencyAPI.Controllers
             try
             {
                 var response = dBHandler.AgencyUpdateAgentStaff(AgentStaff.agentstaffid, AgentStaff.firstname, AgentStaff.lastname, AgentStaff.surname,
-                    AgentStaff.phone, AgentStaff.emailaddress, AgentStaff.username, AgentStaff.password, AgentStaff.alternative_emailaddress, AgentStaff.alternative_phonenumber,
+                    AgentStaff.phone, AgentStaff.emailaddress, AgentStaff.username, AgentStaff.alternative_emailaddress, AgentStaff.alternative_phonenumber,
                     AgentStaff.profileid, AgentStaff.agentid, AgentStaff.agentoutletid);
                 if (response.Rows.Count > 0)
                 {

@@ -108,7 +108,7 @@ namespace AgencyAPI.Controllers
             try
             {
                 var response = dBHandler.AgencyAddAgent(agent.superagentid, agent.businessname, agent.emailaddress, agent.phone, agent.address, agent.bizregcert, agent.bizlicense, agent.financialstatement, agent.goodconductcert
-                , agent.businesstypeid, agent.ownershiptypeid, agent.alternative_emailaddress,agent.alternative_phonenumber);
+                , agent.businesstypeid, agent.ownershiptypeid, agent.alternative_emailaddress,agent.alternative_phonenumber, agent.addedby);
 
                 if (response.Rows.Count > 0)
                 {
@@ -140,7 +140,7 @@ namespace AgencyAPI.Controllers
             try
             {
                 var response = dBHandler.AgencyUpdateAgent(agent.superagentid,agent.agentid, agent.businessname, agent.emailaddress, agent.phone, agent.address, agent.bizregcert,
-                    agent.bizlicense, agent.financialstatement, agent.goodconductcert, agent.businesstypeid, agent.ownershiptypeid, agent.alternative_emailaddress, agent.alternative_phonenumber);
+                    agent.bizlicense, agent.financialstatement, agent.goodconductcert, agent.businesstypeid, agent.ownershiptypeid, agent.alternative_emailaddress, agent.alternative_phonenumber, agent.editededby);
 
                 if (response.Rows.Count > 0)
                 {

@@ -139,7 +139,7 @@ namespace AgencyAPI.Controllers
             try
             {
                 var response = dBHandler.AgencyUpdateBankStaff(BankStaff.bankstaffid, BankStaff.firstname, BankStaff.lastname, BankStaff.surname, BankStaff.phone, BankStaff.emailaddress,
-                    BankStaff.username, BankStaff.password, BankStaff.alternative_emailaddress, BankStaff.alternative_phonenumber,  BankStaff.profileid, BankStaff.bankid, BankStaff.statusid);
+                    BankStaff.username, BankStaff.alternative_emailaddress, BankStaff.alternative_phonenumber,  BankStaff.profileid, BankStaff.bankid, BankStaff.statusid);
                 if (response.Rows.Count > 0)
                 {
                     response_json.Add("RESPONSECODE", response.Rows[0]["RESPONSECODE"].ToString());

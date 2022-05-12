@@ -17,70 +17,94 @@ namespace AgencyAPI.Controllers
     public class AgencyMenuAccessItem : ControllerBase
     {
         // GET: api/<AgencyMenuAccessItem>
-        [HttpGet("GetMenuAccessItems")]
-        public async Task<JObject> Get()
-        {
-            JObject response_json = new JObject();
-            try
-            {
-                DBHandler dBHandler = new DBHandler();
-                var response = dBHandler.AgencyMenuAccessItem();
+        //[HttpGet("GetMenuAccessItems")]
+        //public async Task<JObject> Get()
+        //{
+        //    JObject response_json = new JObject();
+        //    try
+        //    {
+        //        DBHandler dBHandler = new DBHandler();
+        //        var response = dBHandler.AgencyMenuAccessItem();
 
-                if (response.Rows.Count > 0)
-                {
-                    JArray children = new JArray();
-                    int i = 0;
-                    foreach (DataRow row in response.Rows)
-                    {
-                        JObject child = new JObject();
-                        foreach (DataColumn col in response.Columns)
-                        {
-                            child.Add(col.ColumnName, response.Rows[i][col].ToString());
-                        }
-                        children.Add(child);
-                        i++;
-                    }
-                    response_json.Add("RESPONSECODE", "00");
-                    response_json.Add("RESPONSEMESSAGE", "Success!");
-                    response_json.Add("DATA", children);
-                }
-                else
-                {
-                    response_json.Add("RESPONSECODE", "01");
-                    response_json.Add("RESPONSEMESSAGE", "Failed to get menu access items!");
-                }
-            }
-            catch (Exception ex)
-            {
-                response_json.Add("RESPONSECODE", "01");
-                response_json.Add("RESPONSEMESSAGE", ex.Message);
-            }
+        //        if (response.Rows.Count > 0)
+        //        {
+        //            JArray children = new JArray();
+        //            int i = 0;
+        //            foreach (DataRow row in response.Rows)
+        //            {
+        //                JObject child = new JObject();
+        //                foreach (DataColumn col in response.Columns)
+        //                {
+        //                    child.Add(col.ColumnName, response.Rows[i][col].ToString());
+        //                }
+        //                children.Add(child);
+        //                i++;
+        //            }
+        //            response_json.Add("RESPONSECODE", "00");
+        //            response_json.Add("RESPONSEMESSAGE", "Success!");
+        //            response_json.Add("DATA", children);
+        //        }
+        //        else
+        //        {
+        //            response_json.Add("RESPONSECODE", "01");
+        //            response_json.Add("RESPONSEMESSAGE", "Failed to get menu access items!");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response_json.Add("RESPONSECODE", "01");
+        //        response_json.Add("RESPONSEMESSAGE", ex.Message);
+        //    }
 
-            return response_json;
-        }
+        //    return response_json;
+        //}
 
         // GET api/<AgencyMenuAccessItem>/5
         [HttpGet("GetMenuAccessItem/{id}")]
 
         public async Task<JObject> Get(int id)
         {
+            //id Represents profileid
             DBHandler dBHandler = new DBHandler();
             JObject response_json = new JObject();
             try
             {
-                var response = dBHandler.AgencyMenuAccessItem(id);
+                var response = dBHandler.AgencyProfileMenuItems(id);
                 if (response.Rows.Count > 0)
                 {
-                    JObject child = new JObject();
-                    foreach (DataColumn col in response.Columns)
+                    if (response.Rows.Count > 0)
                     {
-
-                        child.Add(col.ColumnName, response.Rows[0][col].ToString());
+                        JArray children = new JArray();
+                        int i = 0;
+                        foreach (DataRow row in response.Rows)
+                        {
+                            JObject child = new JObject();
+                            foreach (DataColumn col in response.Columns)
+                            {
+                                child.Add(col.ColumnName, response.Rows[i][col].ToString());
+                            }
+                            children.Add(child);
+                            i++;
+                        }
+                        response_json.Add("RESPONSECODE", "00");
+                        response_json.Add("RESPONSEMESSAGE", "Success!");
+                        response_json.Add("DATA", children);
                     }
-                    JToken b = JToken.FromObject(response.Rows[0]);
-                    response_json.Add("RESPONSECODE", "00");
-                    response_json.Add("RESPONSEMESSAGE", "Success!");
-                    response_json.Add("DATA", child);
+                    else
+                    {
+                        response_json.Add("RESPONSECODE", "01");
+                        response_json.Add("RESPONSEMESSAGE", "Failed to get menu access items!");
+                    }
+                    //JObject child = new JObject();
+                    //foreach (DataColumn col in response.Columns)
+                    //{
+
+                    //    child.Add(col.ColumnName, response.Rows[0][col].ToString());
+                    //}
+                    //JToken b = JToken.FromObject(response.Rows[0]);
+                    //response_json.Add("RESPONSECODE", "00");
+                    //response_json.Add("RESPONSEMESSAGE", "Success!");
+                    //response_json.Add("DATA", child);
                 }
                 else
                 {
@@ -99,23 +123,22 @@ namespace AgencyAPI.Controllers
 
         // POST api/<AgencyMenuAccessItem>
         [HttpPost("CreateMenuAccessItem")]
-        public async Task<JObject> Post(Menus menuaccessitem, Profile profile)
+        public async Task<JObject> Post([FromBody]MenuAssignment menuAssignment)
         {
             DBHandler dBHandler = new DBHandler();
             JObject response_json = new JObject();
             try
             {
-                var response = dBHandler.AgencyAddMenuAccessItem(menuaccessitem.name, menuaccessitem.link, profile.profileid, menuaccessitem.parentmenuid, menuaccessitem.menuid);
-                if (response.Rows.Count > 0)
+
+                var response2 = dBHandler.AgencyDeleteMenuAccessItemsUnderProfile(menuAssignment.profile.profileid);
+
+                foreach(Menus menu in menuAssignment.menu)
                 {
-                    response_json.Add("RESPONSECODE", response.Rows[0]["RESPONSECODE"].ToString());
-                    response_json.Add("RESPONSEMESSAGE", response.Rows[0]["RESPONSEMESSAGE"].ToString());
+                    dBHandler.AgencyAddMenuAccessItem(menuAssignment.profile.profileid, menu.menuid);
                 }
-                else
-                {
-                    response_json.Add("RESPONSECODE", "01");
-                    response_json.Add("RESPONSEMESSAGE", "Failed to add!");
-                }
+
+                response_json.Add("RESPONSECODE", "000");
+                response_json.Add("RESPONSEMESSAGE", "Success");
             }
             catch (Exception ex)
             {
@@ -127,32 +150,32 @@ namespace AgencyAPI.Controllers
         }
 
         // DELETE api/<AgencyMenuAccessItem>/5
-        [HttpDelete("DeleteMenuAccessItem/{id}")]
-        public async Task<JObject> Delete(int id)
-        {
-            DBHandler dBHandler = new DBHandler();
-            JObject response_json = new JObject();
-            try
-            {
-                var response = dBHandler.AgencyDeleteMenuAccessItem(id);
-                if (response.Rows.Count > 0)
-                {
-                    response_json.Add("RESPONSECODE", response.Rows[0]["RESPONSECODE"].ToString());
-                    response_json.Add("RESPONSEMESSAGE", response.Rows[0]["RESPONSEMESSAGE"].ToString());
-                }
-                else
-                {
-                    response_json.Add("RESPONSECODE", "01");
-                    response_json.Add("RESPONSEMESSAGE", "Failed to delete!");
-                }
-            }
-            catch (Exception ex)
-            {
-                response_json.Add("RESPONSECODE", "01");
-                response_json.Add("RESPONSEMESSAGE", ex.Message);
-            }
+        //[HttpDelete("DeleteMenuAccessItem/{id}")]
+        //public async Task<JObject> Delete(int id)
+        //{
+        //    DBHandler dBHandler = new DBHandler();
+        //    JObject response_json = new JObject();
+        //    try
+        //    {
+        //        var response = dBHandler.AgencyDeleteMenuAccessItem(id);
+        //        if (response.Rows.Count > 0)
+        //        {
+        //            response_json.Add("RESPONSECODE", response.Rows[0]["RESPONSECODE"].ToString());
+        //            response_json.Add("RESPONSEMESSAGE", response.Rows[0]["RESPONSEMESSAGE"].ToString());
+        //        }
+        //        else
+        //        {
+        //            response_json.Add("RESPONSECODE", "01");
+        //            response_json.Add("RESPONSEMESSAGE", "Failed to delete!");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response_json.Add("RESPONSECODE", "01");
+        //        response_json.Add("RESPONSEMESSAGE", ex.Message);
+        //    }
 
-            return response_json;
-        }
+        //    return response_json;
+        //}
     }
 }
