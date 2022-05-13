@@ -1,19 +1,23 @@
 ﻿using AgencyAPI.Models;
 using DB;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace AgencyAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
     public class AgencyBusinessType : ControllerBase
     {
         // GET: api/<AgencyBusinessType>
@@ -127,7 +131,7 @@ namespace AgencyAPI.Controllers
         }
 
         // PUT api/<AgencyBusinessType>/5
-        [HttpPut("UpdateBusinessType")]
+        [HttpPut("UpdateBusinessType/{id}")]
         public async Task<JObject> Put(BusinessType BusinessType)
         {
             DBHandler dBHandler = new DBHandler();

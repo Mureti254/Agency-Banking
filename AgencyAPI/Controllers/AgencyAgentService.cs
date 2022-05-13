@@ -1,5 +1,7 @@
 ﻿using AgencyAPI.Models;
 using DB;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
@@ -12,8 +14,9 @@ using System.Threading.Tasks;
 
 namespace AgencyAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
     public class AgencyAgentService : ControllerBase
     {
         // GET: api/<AgencyAgentService>
@@ -127,7 +130,7 @@ namespace AgencyAPI.Controllers
         }
 
         // PUT api/<AgencyAgentService>/5
-        [HttpPut("UpdateAgentService")]
+        [HttpPut("UpdateAgentService/{id}")]
         public async Task<JObject> Put(AgentService agentService)
         {
             DBHandler dBHandler = new DBHandler();

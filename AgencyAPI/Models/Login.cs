@@ -18,6 +18,5 @@ namespace AgencyAPI.Models
         public string otp { get; set; }
         public DateTime otpdate { get; set; }
         public DateTime otptime { get; set; }
-
     }
 }

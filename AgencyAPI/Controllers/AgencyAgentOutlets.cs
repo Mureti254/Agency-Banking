@@ -1,5 +1,7 @@
 ﻿using AgencyAPI.Models;
 using DB;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
@@ -12,8 +14,9 @@ using System.Threading.Tasks;
 
 namespace AgencyAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
     public class AgencyAgentOutlets : ControllerBase
     {
         // GET: api/<AgencyAgentOutlets>
@@ -105,8 +108,8 @@ namespace AgencyAPI.Controllers
             JObject response_json = new JObject();
             try
             {
-                var response = dBHandler.AgencyAddAgentOutlet(AgentOutlet.agentid, AgentOutlet.name, AgentOutlet.emailaddress, AgentOutlet.phone,
-                    AgentOutlet.latitude, AgentOutlet.longitude);
+                var response = dBHandler.AgencyAddAgentOutlet(AgentOutlet.name, AgentOutlet.phone, AgentOutlet.emailaddress, AgentOutlet.agentid,
+                    AgentOutlet.agentoutletid,AgentOutlet.latitude, AgentOutlet.longitude, AgentOutlet.cashdepositlimit, AgentOutlet.operatingdeviceid);
                 if (response.Rows.Count > 0)
                 {
                     response_json.Add("RESPONSECODE", response.Rows[0]["RESPONSECODE"].ToString());
@@ -128,15 +131,15 @@ namespace AgencyAPI.Controllers
         }
 
         // PUT api/<AgencyAgentOutlets>/5
-        [HttpPut("UpdateAgentOutlet")]
+        [HttpPut("UpdateAgentOutlet/{id}")]
         public async Task<JObject> Put(Outlet AgentOutlet)
         {
             DBHandler dBHandler = new DBHandler();
             JObject response_json = new JObject();
             try
             {
-                var response = dBHandler.AgencyUpdateAgentOutlet(AgentOutlet.agentid, AgentOutlet.agentoutletid, AgentOutlet.name, AgentOutlet.emailaddress, AgentOutlet.phone,
-                    AgentOutlet.latitude, AgentOutlet.longitude);
+                var response = dBHandler.AgencyUpdateAgentOutlet(AgentOutlet.name, AgentOutlet.phone, AgentOutlet.emailaddress, AgentOutlet.agentid, 
+                    AgentOutlet.latitude, AgentOutlet.longitude, AgentOutlet.agentoutletid, AgentOutlet.cashdepositlimit, AgentOutlet.operatingdeviceid);
                 if (response.Rows.Count > 0)
                 {
                     response_json.Add("RESPONSECODE", response.Rows[0]["RESPONSECODE"].ToString());

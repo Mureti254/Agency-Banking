@@ -1,5 +1,7 @@
 ﻿using AgencyAPI.Models;
 using DB;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -13,8 +15,9 @@ using System.Threading.Tasks;
 
 namespace AgencyAPI.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
     public class AgencyAgents : ControllerBase
     {
         // GET: api/<AgencyController>
@@ -108,7 +111,7 @@ namespace AgencyAPI.Controllers
             try
             {
                 var response = dBHandler.AgencyAddAgent(agent.superagentid, agent.businessname, agent.emailaddress, agent.phone, agent.address, agent.bizregcert, agent.bizlicense, agent.financialstatement, agent.goodconductcert
-                , agent.businesstypeid, agent.ownershiptypeid, agent.alternative_emailaddress,agent.alternative_phonenumber);
+                , agent.businesstypeid, agent.ownershiptypeid, agent.alternative_emailaddress,agent.alternative_phonenumber, agent.addedby);
 
                 if (response.Rows.Count > 0)
                 {
@@ -140,7 +143,7 @@ namespace AgencyAPI.Controllers
             try
             {
                 var response = dBHandler.AgencyUpdateAgent(agent.superagentid,agent.agentid, agent.businessname, agent.emailaddress, agent.phone, agent.address, agent.bizregcert,
-                    agent.bizlicense, agent.financialstatement, agent.goodconductcert, agent.businesstypeid, agent.ownershiptypeid, agent.alternative_emailaddress, agent.alternative_phonenumber);
+                    agent.bizlicense, agent.financialstatement, agent.goodconductcert, agent.businesstypeid, agent.ownershiptypeid, agent.alternative_emailaddress, agent.alternative_phonenumber, agent.editededby);
 
                 if (response.Rows.Count > 0)
                 {

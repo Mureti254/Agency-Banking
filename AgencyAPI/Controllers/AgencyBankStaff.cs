@@ -1,19 +1,24 @@
 ﻿using AgencyAPI.Models;
 using DB;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace AgencyAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
+    
     public class AgencyBankStaff : ControllerBase
     {
         // GET: api/<AgencyBankStaff>
@@ -105,8 +110,8 @@ namespace AgencyAPI.Controllers
             JObject response_json = new JObject();
             try
             {
-                //string[] saAllowedCharacters = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "b", "D", "Z", "X", "p", "e", "f", "_" };
-                //string sRandomPass = GenerateRandomPass(8, saAllowedCharacters);
+                string[] saAllowedCharacters = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "-", "+", "{", "}", "?", ".", ",", ":", ":", "~" };
+                string sRandomPass = GenerateRandomPass(8, saAllowedCharacters);
                 var encryptedpassword = Citisec.EncryptString(BankStaff.password); /*(sRandomPass);*/
                 var response = dBHandler.AgencyAddBankStaff(BankStaff.firstname, BankStaff.lastname, BankStaff.surname, BankStaff.phone, BankStaff.emailaddress,
                     BankStaff.username, encryptedpassword, BankStaff.alternative_emailaddress, BankStaff.alternative_phonenumber, BankStaff.profileid, BankStaff.bankid, BankStaff.statusid);
@@ -139,7 +144,7 @@ namespace AgencyAPI.Controllers
             try
             {
                 var response = dBHandler.AgencyUpdateBankStaff(BankStaff.bankstaffid, BankStaff.firstname, BankStaff.lastname, BankStaff.surname, BankStaff.phone, BankStaff.emailaddress,
-                    BankStaff.username, BankStaff.password, BankStaff.alternative_emailaddress, BankStaff.alternative_phonenumber,  BankStaff.profileid, BankStaff.bankid, BankStaff.statusid);
+                    BankStaff.username, BankStaff.alternative_emailaddress, BankStaff.alternative_phonenumber,  BankStaff.profileid, BankStaff.bankid, BankStaff.statusid);
                 if (response.Rows.Count > 0)
                 {
                     response_json.Add("RESPONSECODE", response.Rows[0]["RESPONSECODE"].ToString());

@@ -1,5 +1,7 @@
 ﻿using AgencyAPI.Models;
 using DB;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
@@ -12,8 +14,9 @@ using System.Threading.Tasks;
 
 namespace AgencyAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
     public class AgencyReasonType : ControllerBase
     {
         // GET: api/<AgencyReasonType>
@@ -128,7 +131,7 @@ namespace AgencyAPI.Controllers
         }
 
         // PUT api/<AgencyReasonType>/5
-        [HttpPut("UpdateReasonType")]
+        [HttpPut("UpdateReasonType/{id}")]
         public async Task<JObject> Put(Reasontype Reasontype)
         {
             DBHandler dBHandler = new DBHandler();

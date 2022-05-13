@@ -1,5 +1,7 @@
 ﻿using AgencyAPI.Models;
 using DB;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
@@ -12,8 +14,9 @@ using System.Threading.Tasks;
 
 namespace AgencyAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
     public class AgencyAgentStaff : ControllerBase
     {
         // GET: api/<AgencyAgentStaff>
@@ -105,8 +108,8 @@ namespace AgencyAPI.Controllers
             JObject response_json = new JObject();
             try
             {
-                //string[] saAllowedCharacters = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0","A", "B", "C", "D", "E", "F", "G", "H","I","J""L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z" };
-                //string sRandomPass = GenerateRandomPass(8, saAllowedCharacters);
+                string[] saAllowedCharacters = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J","L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z","!","@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "-", "+", "{", "}", "?", ".", ",", ":", ":", "~" };
+                string sRandomPass = GenerateRandomPass(8, saAllowedCharacters);
                 var encryptedpassword = Citisec.EncryptString(AgentStaff.password); /*(sRandomPass);*/
                 var response = dBHandler.AgencyAddAgentStaff(AgentStaff.firstname, AgentStaff.lastname, AgentStaff.surname, AgentStaff.phone, AgentStaff.emailaddress, AgentStaff.username, encryptedpassword,
                     "", AgentStaff.alternative_phonenumber, AgentStaff.alternative_emailaddress,  AgentStaff.profileid, AgentStaff.agentid ,AgentStaff.agentoutletid);
@@ -131,7 +134,7 @@ namespace AgencyAPI.Controllers
         }
 
         // PUT api/<AgencyAgentStaff>/5
-        [HttpPut("UpdateAgentStaff")]
+        [HttpPut("UpdateAgentStaff/{id}")]
         public async Task<JObject> Put(AgentStaff AgentStaff)
         {
             DBHandler dBHandler = new DBHandler();
@@ -139,7 +142,7 @@ namespace AgencyAPI.Controllers
             try
             {
                 var response = dBHandler.AgencyUpdateAgentStaff(AgentStaff.agentstaffid, AgentStaff.firstname, AgentStaff.lastname, AgentStaff.surname,
-                    AgentStaff.phone, AgentStaff.emailaddress, AgentStaff.username, AgentStaff.password, AgentStaff.alternative_emailaddress, AgentStaff.alternative_phonenumber,
+                    AgentStaff.phone, AgentStaff.emailaddress, AgentStaff.username, AgentStaff.alternative_emailaddress, AgentStaff.alternative_phonenumber,
                     AgentStaff.profileid, AgentStaff.agentid, AgentStaff.agentoutletid);
                 if (response.Rows.Count > 0)
                 {

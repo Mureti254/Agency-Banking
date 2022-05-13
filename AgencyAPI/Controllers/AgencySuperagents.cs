@@ -1,4 +1,6 @@
 ﻿using DB;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,8 +13,9 @@ using System.Threading.Tasks;
 
 namespace AgencyAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]")]
     public class AgencySuperagents : ControllerBase
     {
         // GET: api/<AgencySuperagents>
@@ -95,23 +98,5 @@ namespace AgencyAPI.Controllers
 
             return response_json;
         }
-
-        //// POST api/<AgencySuperagents>
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT api/<AgencySuperagents>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE api/<AgencySuperagents>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

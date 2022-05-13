@@ -33,5 +33,8 @@ namespace AgencyAPI.Models
         [DataType(DataType.PhoneNumber)]
         public string alternative_phonenumber { get; set; }
 
+        public int addedby { get; set; }
+        public int editededby { get; set; }
+
     }
 }

@@ -21,7 +21,12 @@ namespace AgencyAPI.Models
         public int statusid { get; set; }
         public Double latitude { get; set; }
         public Double longitude { get; set; }
+        public int cashdepositlimit { get; set; }
+        public int operatingdeviceid { get; set; }
+        public string outlet_activity_status { get; set; }
         public int agentoutletid { get; set; }
         public int agentoutletholderid { get; set; }
+        
+        
     }
 }

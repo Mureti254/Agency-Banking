@@ -30,14 +30,15 @@ namespace DB
             IConfigurationBuilder builder = new ConfigurationBuilder();
             builder.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"));
 
-            //var root = builder.Build();
-            systemconnection = String.Format("Server={0};Database={1};User ID={2};Password={3};", "DITPC005\\SQL2019", "AgencyBanking", "sa", "pass@word1");
+            var root = builder.Build();
+            //systemconnection = String.Format("Server={0};Database={1};User ID={2};Password={3};", "DITPC005\\SQL2019", "AgencyBanking", "sa", "pass@word1");
+            //systemconnection = String.Format("Server={0};Database={1};User ID={2};Password={3};", "10.110.0.35\\SQL2019", "AgencyBanking", "sa", "2sYstemmaster!");
 
             //String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};User ID={1};Password={2};", @"C:\Test\Test.mdb", _name, _pass)
 
             //systemconnection = "Data Source=" + root.GetSection("ConnectSettings:DbServer").ToString() + ";Database=" + root.GetSection("ConnectSettings:DbSource").ToString() + ";User ID=" + root.GetSection("ConnectSettings:DbUser").ToString() + ";Password=" + root.GetSection("ConnectSettings:DbPass").ToString() + ";";
 
-            //systemconnection = root.GetConnectionString("SystemConnection");
+            systemconnection = root.GetConnectionString("SystemConnection");
         }
 
         
@@ -239,10 +240,6 @@ namespace DB
             return dt;
         }
 
-        public void AgencyUpdateComplaint(int v1, int v2, string resolved, string remarks, string complaintdesc)
-        {
-            throw new NotImplementedException();
-        }
 
         public string GetScalarItem(string sql, DataBaseObject database = DataBaseObject.HostDB)
         {
@@ -1544,7 +1541,7 @@ namespace DB
         }
         public DataTable AgencyAddAgent(int superagentid, string businessname, string emailaddress, string phone, string address,
             string bizregcert, string bizlicense, string financialstatement, string goodconductcert, int businesstypeid,
-            int ownershiptypeid, string alternative_emailaddress, string alternative_phonenumber, DataBaseObject database = DataBaseObject.HostDB)
+            int ownershiptypeid, string alternative_emailaddress, string alternative_phonenumber, int addedby, DataBaseObject database = DataBaseObject.HostDB)
         {
             DataTable dt = new DataTable();
 
@@ -1571,6 +1568,7 @@ namespace DB
                             cmd.Parameters.AddWithValue("@ownershiptypeid", ownershiptypeid);
                             cmd.Parameters.AddWithValue("@alternative_emailaddress", alternative_emailaddress);
                             cmd.Parameters.AddWithValue("@alternative_phonenumber", alternative_phonenumber);
+                            cmd.Parameters.AddWithValue("@addedby", addedby);
                             sd.Fill(dt);
                         }
                     }
@@ -1587,7 +1585,8 @@ namespace DB
         }
 
         public DataTable AgencyUpdateAgent(int superagentid,int agentid, string businessname, string emailaddress, string phone, string address, string bizregcert,
-            string bizlicense, string financialstatement, string goodconductcert, int businesstypeid, int ownershiptypeid,string alternative_emailaddress,string alternative_phonenumber, DataBaseObject database = DataBaseObject.HostDB)
+            string bizlicense, string financialstatement, string goodconductcert, int businesstypeid, int ownershiptypeid,string alternative_emailaddress,string alternative_phonenumber,
+            int editededby, DataBaseObject database = DataBaseObject.HostDB)
         {
             DataTable dt = new DataTable();
 
@@ -1615,6 +1614,7 @@ namespace DB
                             cmd.Parameters.AddWithValue("@ownershiptypeid", ownershiptypeid);
                             cmd.Parameters.AddWithValue("@alternative_emailaddress", alternative_emailaddress);
                             cmd.Parameters.AddWithValue("@alternative_phonenumber", alternative_phonenumber);
+                            cmd.Parameters.AddWithValue("@@editedby", editededby);
                             sd.Fill(dt);
                         }
                     }
@@ -3627,6 +3627,7 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
                         using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@outletid", outletid);
                             cmd.Parameters.AddWithValue("@customerphonenumber", customerphonenumber);
                             cmd.Parameters.AddWithValue("@resolved", resolved);
                             cmd.Parameters.AddWithValue("@remarks", remarks);
@@ -3816,7 +3817,7 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
 
 
         public DataTable AgencyUpdateAgentStaff(int agentstaffid, string firstname, string lastname, string surname, string phone, string emailaddress,
-            string username, string password , string alternative_emailaddress, string alternative_phonenumber,  int profileid , int agentid, int agentoutletid,  DataBaseObject database = DataBaseObject.HostDB)
+            string username,  string alternative_emailaddress, string alternative_phonenumber,  int profileid , int agentid, int agentoutletid,  DataBaseObject database = DataBaseObject.HostDB)
         {
             DataTable dt = new DataTable();
 
@@ -3836,7 +3837,6 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
                             cmd.Parameters.AddWithValue("@phone", phone);
                             cmd.Parameters.AddWithValue("@emailaddress", emailaddress);
                             cmd.Parameters.AddWithValue("@username", username);
-                            cmd.Parameters.AddWithValue("@password", password);
                             cmd.Parameters.AddWithValue("@alternative_emailaddress", alternative_emailaddress);
                             cmd.Parameters.AddWithValue("@alternative_phonenumber", alternative_phonenumber);
                             cmd.Parameters.AddWithValue("@profileid", profileid);
@@ -4176,7 +4176,7 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
 
 
         public DataTable AgencyUpdateBankStaff(int bankstaffid, string firstname, string lastname, string surname, string phone, string emailaddress,
-            string username, string password, string alternative_phonenumber, string alternative_emailaddress, int bankid,int profileid, int statusid=1 ,DataBaseObject database = DataBaseObject.HostDB)
+            string username, string alternative_phonenumber, string alternative_emailaddress, int bankid,int profileid, int statusid=1 ,DataBaseObject database = DataBaseObject.HostDB)
         {
             DataTable dt = new DataTable();
 
@@ -4197,7 +4197,6 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
                             cmd.Parameters.AddWithValue("@phone", phone);
                             cmd.Parameters.AddWithValue("@emailaddress", emailaddress);
                             cmd.Parameters.AddWithValue("@username", username);
-                            cmd.Parameters.AddWithValue("@password", password);
                             cmd.Parameters.AddWithValue("@bankid", bankid);
                             cmd.Parameters.AddWithValue("@profileid", profileid);
                             cmd.Parameters.AddWithValue("@statusid", statusid);
@@ -4409,8 +4408,8 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
 
             return dt;
         }
-        public DataTable AgencyAddAgentOutlet(int agentid, string name, string emailaddress, string phone, Double latitude,
-            Double longitude,  DataBaseObject database = DataBaseObject.HostDB)
+        public DataTable AgencyAddAgentOutlet(string name, string phone, string emailaddress, int agentid,int agentoutletid, Double latitude,
+            Double longitude,int cash_deposit_limit,int operatingdeviceid, int outlet_activity_status = 6, DataBaseObject database = DataBaseObject.HostDB)
         {
             DataTable dt = new DataTable();
 
@@ -4430,8 +4429,12 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
                             cmd.Parameters.AddWithValue("@phone", phone);
                             cmd.Parameters.AddWithValue("@emailaddress", emailaddress);
                             cmd.Parameters.AddWithValue("@agentid", agentid);
+                            cmd.Parameters.AddWithValue("@agentoutletid", agentoutletid);
                             cmd.Parameters.AddWithValue("@latitude", latitude);
                             cmd.Parameters.AddWithValue("@longitude", longitude);
+                            cmd.Parameters.AddWithValue("@cash_deposit_limit", cash_deposit_limit);
+                            cmd.Parameters.AddWithValue("@operating_device_id", operatingdeviceid);
+                           
                             sd.Fill(dt);
                         }
                     }
@@ -4540,8 +4543,9 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
         }
 
 
-        public DataTable AgencyUpdateAgentOutlet(int agentid, int agentoutletid, string name, string emailaddress, string phone, Double latitude,
-            Double longitude, DataBaseObject database = DataBaseObject.HostDB)
+        public DataTable AgencyUpdateAgentOutlet(string name, string phone, string emailaddress, int agentid, Double latitude, Double longitude,
+            int agentoutletid,
+             int cash_deposit_limit, int operatingdeviceid, int outlet_activity_status = 6, DataBaseObject database = DataBaseObject.HostDB)
         {
             DataTable dt = new DataTable();
 
@@ -4562,6 +4566,74 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
                             cmd.Parameters.AddWithValue("@phone", phone);
                             cmd.Parameters.AddWithValue("@latitude", latitude);
                             cmd.Parameters.AddWithValue("@longitude", longitude);
+                            cmd.Parameters.AddWithValue("@cash_deposit_limit", cash_deposit_limit);
+                            cmd.Parameters.AddWithValue("@operating_device_id", operatingdeviceid);
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
+
+        public DataTable AgencyEmailScheduler(string RecipientEmail, string subject, string message, string SenderEmail, string messagetype,
+            string otp, DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("emailscheduler_inserts", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@RecipientEmail", RecipientEmail);
+                            cmd.Parameters.AddWithValue("@subject", subject);
+                            cmd.Parameters.AddWithValue("@message", message);
+                            cmd.Parameters.AddWithValue("@SenderEmail", SenderEmail);
+                            cmd.Parameters.AddWithValue("@messagetype", messagetype);
+                            cmd.Parameters.AddWithValue("@otp", otp);
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
+
+        public DataTable AgencyPasswordChanges(string emailaddress, string newpassword, string confirmedpassword, DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("password_change", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@emailaddress", emailaddress);
+                            cmd.Parameters.AddWithValue("@newpassword", newpassword); 
+                            cmd.Parameters.AddWithValue("@confirmedpassword", confirmedpassword);
                             sd.Fill(dt);
                         }
                     }
@@ -4578,6 +4650,289 @@ public DataTable AgencyAddProfileApproval(int profileholderid = 0, bool approve 
         }
 
 
+        //public DataTable AgencyMenuAccessItem(DataBaseObject database = DataBaseObject.HostDB)
+        //{
+        //    DataTable dt = new DataTable();
+
+        //    try
+        //    {
+        //        using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+        //        {
+        //            using (SqlCommand cmd = new SqlCommand("get_records", connect))
+        //            {
+        //                using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+        //                {
+        //                    cmd.CommandType = CommandType.StoredProcedure;
+
+        //                    cmd.Parameters.AddWithValue("@module", "menu_access_item");
+        //                    sd.Fill(dt);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+        //            "bridge_check_transaction_fee_status: " + ex.ToString());
+        //        Console.WriteLine(ex.Message);
+        //    }
+
+        //    return dt;
+        //}
+
+        //public DataTable AgencyMenuAccessItem(int id, DataBaseObject database = DataBaseObject.HostDB)
+        //{
+        //    DataTable dt = new DataTable();
+
+        //    try
+        //    {
+        //        using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+        //        {
+        //            using (SqlCommand cmd = new SqlCommand("get_records", connect))
+        //            {
+        //                using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+        //                {
+        //                    cmd.CommandType = CommandType.StoredProcedure;
+
+        //                    cmd.Parameters.AddWithValue("@module", "menu_access_item");
+        //                    cmd.Parameters.AddWithValue("@param1", id + "");
+        //                    sd.Fill(dt);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+        //            "bridge_check_transaction_fee_status: " + ex.ToString());
+        //        Console.WriteLine(ex.Message);
+        //    }
+
+        //    return dt;
+        //}
+
+        public DataTable AgencyAddMenuAccessItem( int profileid, int menuid, DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("insert_menu_access_item", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            //cmd.Parameters.AddWithValue("@menu_access_name", name);
+                            //cmd.Parameters.AddWithValue("@link", link);
+                            cmd.Parameters.AddWithValue("@profileid", profileid);
+                            //cmd.Parameters.AddWithValue("@parentmenuid", parentmenuid);
+                            cmd.Parameters.AddWithValue("@menuid", menuid);
+
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
+
+        public DataTable AgencyDeleteMenuAccessItemsUnderProfile(int profileid, DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("delete_menu_access_item", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@profileid", profileid);
+
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
+
+        public DataTable AgencyProfileMenuItems(int profileid,DataBaseObject database = DataBaseObject.HostDB)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+                {
+                    using (SqlCommand cmd = new SqlCommand("get_records", connect))
+                    {
+                        using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+                        {
+                            cmd.CommandType = CommandType.StoredProcedure;
+
+                            cmd.Parameters.AddWithValue("@module", "profile_menus");
+                            cmd.Parameters.AddWithValue("@param1", ""+ profileid);
+
+                            sd.Fill(dt);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+                    "bridge_check_transaction_fee_status: " + ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+
+            return dt;
+        }
+        //public DataTable AgencyMenuItem(int id, DataBaseObject database = DataBaseObject.HostDB)
+        //{
+        //    DataTable dt = new DataTable();
+
+        //    try
+        //    {
+        //        using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+        //        {
+        //            using (SqlCommand cmd = new SqlCommand("get_records", connect))
+        //            {
+        //                using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+        //                {
+        //                    cmd.CommandType = CommandType.StoredProcedure;
+
+        //                    cmd.Parameters.AddWithValue("@module", "menu_item");
+        //                    cmd.Parameters.AddWithValue("@param1", id + "");
+        //                    sd.Fill(dt);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+        //            "bridge_check_transaction_fee_status: " + ex.ToString());
+        //        Console.WriteLine(ex.Message);
+        //    }
+
+        //    return dt;
+        //}
+
+        //public DataTable AgencyAddMenuItem(string name,string link,string icon, int parentmenuid,DataBaseObject database = DataBaseObject.HostDB)
+        //{
+        //    DataTable dt = new DataTable();
+
+        //    try
+        //    {
+        //        using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+        //        {
+        //            using (SqlCommand cmd = new SqlCommand("insert_menu", connect))
+        //            {
+        //                using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+        //                {
+        //                    cmd.CommandType = CommandType.StoredProcedure;
+
+        //                    cmd.Parameters.AddWithValue("@menuname", name);
+        //                    cmd.Parameters.AddWithValue("@link", link);
+        //                    cmd.Parameters.AddWithValue("@icon", icon);
+        //                    cmd.Parameters.AddWithValue("@parentmenuid", parentmenuid);
+        //                    sd.Fill(dt);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+        //            "bridge_check_transaction_fee_status: " + ex.ToString());
+        //        Console.WriteLine(ex.Message);
+        //    }
+
+        //    return dt;
+        //}
+
+        //public DataTable AgencyDeleteMenuItem(int menuitemid, DataBaseObject database = DataBaseObject.HostDB)
+        //{
+        //    DataTable dt = new DataTable();
+
+        //    try
+        //    {
+        //        using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+        //        {
+        //            using (SqlCommand cmd = new SqlCommand("delete_menu_item", connect))
+        //            {
+        //                using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+        //                {
+        //                    cmd.CommandType = CommandType.StoredProcedure;
+
+        //                    cmd.Parameters.AddWithValue("@menuitemid", menuitemid);
+
+        //                    sd.Fill(dt);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+        //            "bridge_check_transaction_fee_status: " + ex.ToString());
+        //        Console.WriteLine(ex.Message);
+        //    }
+
+        //    return dt;
+        //}
+
+
+        //public DataTable AgencyProfileMenuSelect(string profilename,DataBaseObject database = DataBaseObject.HostDB)
+        //{
+        //    DataTable dt = new DataTable();
+
+        //    try
+        //    {
+        //        using (SqlConnection connect = new SqlConnection(GetDataBaseConnection(database)))
+        //        {
+        //            using (SqlCommand cmd = new SqlCommand("Menu_by_profile_select", connect))
+        //            {
+        //                using (SqlDataAdapter sd = new SqlDataAdapter(cmd))
+        //                {
+        //                    cmd.CommandType = CommandType.StoredProcedure;
+
+        //                    cmd.Parameters.AddWithValue("@profilename", profilename);
+        //                    sd.Fill(dt);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        FileLogHandler.log_message_fields("ClearingServer", "ERROR",
+        //            "bridge_check_transaction_fee_status: " + ex.ToString());
+        //        Console.WriteLine(ex.Message);
+        //    }
+
+        //    return dt;
+        //}
         #endregion
     }
     public class Crypto
