@@ -8,6 +8,8 @@ namespace AgencyAPI.Models
 {
     public class BankStaff
     {
+        public static List<UserModel> Users = new List<UserModel>();
+
         public string firstname { get; set; }
         public string lastname { get; set; }
         public string surname { get; set; }

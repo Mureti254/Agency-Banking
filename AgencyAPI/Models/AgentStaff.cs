@@ -8,6 +8,8 @@ namespace AgencyAPI.Models
 {
     public class AgentStaff
     {
+        public static List<UserModel> Users = new List<UserModel>();
+
         public int agentstaffid { get; set; }
         public string firstname { get; set; }
         public string lastname { get; set; }
@@ -25,7 +27,7 @@ namespace AgencyAPI.Models
         public DateTime otptime { get; set; }
         public DateTime dateadded { get; set; }
         public int profileid { get; set; }
-     
+
         public int agentid { get; set; }
         public int agentoutletid { get; set; }
         [RegularExpression(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
